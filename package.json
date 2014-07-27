@@ -1,0 +1,41 @@
+{
+	"name": "geoffrey",
+	"description": "goeffrey is a Siri-like personal assistant running on node.js.",
+	"version": "0.1.0",
+	"main": "dist/geoffrey.js",
+	"keywords": [
+		"geoffrey",
+		"personal assistant",
+		"wit.ai",
+		"nodejs",
+		"speech recognition",
+		"siri",
+		"google now"
+	],
+	"authors": {
+		"name": "Jannis R",
+		"email": "mail@jannisr.de",
+		"url": "http://jannisr.de"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/derhuerst/geoffrey.git"
+	},
+	"license": "BSD-3-Clause",
+	"dependencies": {
+		"readall":			"^0.0.4",
+		"wit-node":			"^0.0.4"
+	},
+	"devDependencies": {
+		"minimist":			"^0.2.0",
+		"fs-sync":			"^0.2.4",
+		"gulp":				"^3.8.6",
+		"gulp-concat":		"^2.3.3",
+		"gulp-filesize":	"^0.0.6",
+		"gulp-rename":		"^1.2.0"
+	},
+	"scripts": {
+		"build": "gulp"
+	},
+	"engine": "node >= 0.10"
+}

@@ -1,0 +1,23 @@
+{
+	"name": "linkup",
+	"version": "0.1.0",
+	"main": "dist/linkup.js",
+	"license": "BSD-3-Clause",
+	"ignore": [
+		"package.json",
+		".editorconfig",
+		".DS_Store",
+		"gulpfile.js"
+	],
+	"keywords": [
+		"linkup",
+		"webrtc",
+		"file",
+		"sharing",
+		"javascript",
+		"peerjs",
+		"datachannel",
+		"sctp",
+		"p2p"
+	]
+}

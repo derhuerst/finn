@@ -1,0 +1,27 @@
+{
+	"folders": [
+		{
+			"path": ".",
+			"name": "witbot",
+			"folder_exclude_patterns": [
+				"src",
+				"dist"
+			],
+			"file_exclude_patterns": [
+				"*.sublime-workspace"
+			]
+		},
+		{
+			"path": "./src",
+			"name": "src"
+		},
+		{
+			"path": "./dist",
+			"name": "dist"
+		}
+	],
+	"settings": {
+		"tab_size": 4,
+		"translate_tabs_to_spaces": false
+	}
+}
