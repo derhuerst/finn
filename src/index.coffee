@@ -62,10 +62,10 @@ class Geoffrey extends EventEmitter
 
 	listen: (port) ->
 		@server = http.createServer()
-		@server.on 'request', (request, response) ->
+		@server.on 'request', (request, response) =>
 			response.status = 200
 			response.setHeader 'Content-Type', 'application/json'
-			readAll request, (question) ->    # read all stream data
+			readAll request, (question) =>    # read all stream data
 				@query question, (answer) ->
 					response.end JSON.stringify answer
 		@server.listen @port
