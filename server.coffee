@@ -10,6 +10,8 @@
 
 # dependencies
 minimist 	= require 'minimist'
+path 			= require 'path'
+fs 			= require 'fs'
 log			= require 'obs-log'
 Geoffrey	= require './index'
 
@@ -33,17 +35,32 @@ options = minimist process.argv
 # option -h
 if options.h?
 	console.log switches.join '\n'
+	process.exit 0
 
 # option -v
-else if options.v?
+if options.v?
 	console.log pkg.version
+	process.exit 0
 
 # option -w
-else if not options.w?
-	throw new Error 'no wit.ai token passed'
+if not options.w?
+	console.log 'no wit.ai token passed'
+	process.exit 1
+
+# option -s
+isDir = (path) ->
+	return fs.existsSync(options.s) and fs.statSync(options.s).isDirectory()
+if not options.s?
+	options.s = path.resolve process.env.HOME, '.geoffrey'
+	if not isDir options.s
+		fs.mkdirSync options.s, 0o755
+else
+	if not isDir options.s
+		console.log 'script directory doesn\'t exist'
+		process.exit 1
 
 # run the server
-else
-	server = new Geoffrey
-		witToken: options.w
-		scripts: if options.s? then options.s else '~/.geoffrey'
+server = new Geoffrey
+	witToken: options.w
+	scripts: options.s
+log 'server running'
