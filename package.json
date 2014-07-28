@@ -2,7 +2,7 @@
 	"name": "geoffrey",
 	"description": "goeffrey is a Siri-like personal assistant running on node.js.",
 	"version": "0.2.0",
-	"main": "dist/geoffrey.js",
+	"main": "index.coffee.coffee",
 	"keywords": [
 		"geoffrey",
 		"personal assistant",
@@ -26,8 +26,7 @@
 		"minimist":			"^0.2.0",
 		"findit":			"^2.0.0",
 		"obs-log":			"^1.1.0",
-		"readAll":			"^0.0.4",
-		"wit-node":			"^0.0.4"
+		"readAll":			"^0.0.4"
 	},
 	"scripts": {
 		"build": "npm install && gulp build",

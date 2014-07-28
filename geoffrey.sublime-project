@@ -14,10 +14,6 @@
 		{
 			"path": "./src",
 			"name": "src"
-		},
-		{
-			"path": "./dist",
-			"name": "dist"
 		}
 	],
 	"settings": {

@@ -13,7 +13,7 @@ findit			= require 'findit'
 log				= require 'obs-log'
 http			= require 'http'
 readAll			= require 'readall'
-wit				= require('wit-node').wit    # bug in the wit-node package; todo: create pull request
+Wit				= require 'wit-ai'
 
 
 
@@ -23,7 +23,7 @@ class Geoffrey extends EventEmitter
 
 
 
-	witToken: null
+	wit: null
 
 	scripts: null
 
@@ -35,10 +35,9 @@ class Geoffrey extends EventEmitter
 		if !options?
 			options = {}
 
-		if options.witToken?
-			@witToken = options.witToken
-		else
+		if not options.witToken?
 			throw new Error 'no wit token passed'
+		@wit = new Wit options.witToken
 
 		options.scripts = path.resolve if options.scripts? then options.scripts else "#{__dirname}/../scripts"
 
@@ -80,11 +79,12 @@ class Geoffrey extends EventEmitter
 
 
 	_queryWit: (text, callback) ->
-		wit.token = @witToken
-		# we need to set the token every time because of a bug in the wit-node package; see https://github.com/modeset/wit-node/pull/3.
-		request = wit.message text
-		request.then (result) ->
+		wit.analyze {
+			user_text: text
+		}, (error, response, result) ->
 			data = []
+			result = JSON.parse result
+			console.log result
 			for entity in result.entities
 				data.push
 					type: entity.value
