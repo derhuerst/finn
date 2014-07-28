@@ -1,14 +1,30 @@
-{EventEmitter} = require 'events'
-readall = require 'readall'
-wit = require('wit-node').wit
-{readdirSync} = require 'fs'
+# geoffrey
+# goeffrey is a Siri-like personal assistant running on node.js.
+# v0.2.0
+
+
+
+
+
+# dependencies
+{EventEmitter}	= require 'events'
+path			= require 'path'
+findit			= require 'findit'
+log				= require 'obs-log'
+http			= require 'http'
+wit				= require('wit-node').wit    # bug in the wit-node package; todo: create pull request
+
+
+
 
 
 class Geoffrey extends EventEmitter
 
 
 
-	server: null
+	witToken: null
+
+	scripts: null
 
 	scripts: null
 
@@ -18,11 +34,22 @@ class Geoffrey extends EventEmitter
 		if !options?
 			options = {}
 
+		if options.witToken?
+			@witToken = options.witToken
+		else
+			throw new Error 'no wit token passed'
+
+		options.scripts = path.resolve if options.scripts? then options.scripts else "#{__dirname}/../scripts"
+
 		# load scripts
 		@scripts = {}
-		for file in readdirSync '../scripts'    # todo: robust path
-			script = file.slice 0, file.lastIndexOf '.'    # todo: use module for that?
-			@scripts[script] = require path.resolve '..', 'scripts', file
+		reader = findit options.scripts
+		reader.on 'file', (file) =>
+			file = path.relative options.scripts, file
+			if (path.extname file) is '.coffee'
+				log "using script #{file}"
+				script = path.basename().replace '.', '-'
+				@scripts[script] = require path.resolve options.scripts, file
 
 		# HTTP server
 		if not options.listen? or options.listen is true
@@ -31,8 +58,7 @@ class Geoffrey extends EventEmitter
 
 
 	listen: (port) ->
-		port = 10000 if not port?
-		@server = http.createServer
+		@server = http.createServer()
 		@server.on 'request', (request, response) ->
 			response.status = 200
 			response.setHeader 'Content-Type', 'application/json'
@@ -40,6 +66,7 @@ class Geoffrey extends EventEmitter
 				@query question, (answer) ->
 					response.write JSON.stringify answer
 			response.end()
+		@server.listen if oprt? then port else 10000
 
 
 
@@ -60,3 +87,9 @@ class Geoffrey extends EventEmitter
 					type: entity.value
 					value: entity.body
 			callback result.intent, data
+
+
+
+
+
+module.exports = Geoffrey

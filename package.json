@@ -1,7 +1,7 @@
 {
 	"name": "geoffrey",
 	"description": "goeffrey is a Siri-like personal assistant running on node.js.",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"main": "dist/geoffrey.js",
 	"keywords": [
 		"geoffrey",
@@ -12,7 +12,7 @@
 		"siri",
 		"google now"
 	],
-	"authors": {
+	"author": {
 		"name": "Jannis R",
 		"email": "mail@jannisr.de",
 		"url": "http://jannisr.de"
@@ -23,19 +23,18 @@
 	},
 	"license": "BSD-3-Clause",
 	"dependencies": {
-		"readall":			"^0.0.4",
+		"minimist":			"^0.2.0",
+		"findit":			"^2.0.0",
+		"obs-log":			"^1.1.0",
 		"wit-node":			"^0.0.4"
 	},
-	"devDependencies": {
-		"minimist":			"^0.2.0",
-		"fs-sync":			"^0.2.4",
-		"gulp":				"^3.8.6",
-		"gulp-concat":		"^2.3.3",
-		"gulp-filesize":	"^0.0.6",
-		"gulp-rename":		"^1.2.0"
-	},
 	"scripts": {
-		"build": "gulp"
+		"build": "npm install && gulp build",
+		"dist": "npm run build",
+		"run": "coffee server.coffee"
+	},
+	"bin": {
+		"geoffrey": "server.coffee"
 	},
 	"engine": "node >= 0.10"
 }
