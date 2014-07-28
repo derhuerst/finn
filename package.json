@@ -23,13 +23,13 @@
 	},
 	"license": "BSD-3-Clause",
 	"dependencies": {
-		"minimist":			"^0.2.0",
+		"optparse":			"^1.0.5",
 		"walkdir":			"^0.0.7",
 		"obs-log":			"^1.1.0",
 		"readall":			"^0.0.4"
 	},
 	"bin": {
-		"geoffrey": "server.coffee"
+		"geoffrey": "bin/geoffrey"
 	},
 	"engine": "node >= 0.10"
 }

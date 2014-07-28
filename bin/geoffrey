@@ -1,0 +1,73 @@
+#!/usr/bin/env coffee
+
+# geoffrey
+# goeffrey is a Siri-like personal assistant running on node.js.
+
+
+
+
+
+# dependencies
+{OptionParser}	= require 'optparse'
+path			= require 'path'
+fs				= require 'fs'
+
+
+
+
+
+pkg			= require '../package.json'
+parser = new OptionParser [
+	[	'-h',	'--help',			'print this help and quit'			]
+	[	'-v',	'--version',		'print geoffrey version and quit'	]
+	[	'-d',	'--deps',			'install plugin dependencies first'	]
+	[	'-w',	'--wit TOKEN',		'wit.ai token'						]
+	[	'-s',	'--scripts PATH',	'scripts path'						]
+	[	'-p',	'--port PORT',		'HTTP port'							]
+]
+options = {}
+
+
+
+
+
+# --help
+parser.on 'help', () ->
+	console.log Parser.toString()
+	process.exit 0
+
+# --version
+parser.on 'version', () ->
+	console.log pkg.version
+	process.exit 0
+
+# --wit
+parser.on 'wit', (option, value) ->
+	options.wit = value
+
+# --port
+parser.on 'port', (option, value) ->
+	options.port = value
+
+# --scripts
+parser.on 'scripts', (option, value) ->
+	value = path.resolve process.env.HOME, value
+	if fs.existsSync(value) and fs.statSync(value).isDirectory()
+		options.scripts = value
+	else
+		console.log "#{value}: no such directory"
+		process.exit 1
+
+# --deps
+parser.on 'deps', (option, value) ->
+	# todo
+
+parser.parse process.argv
+
+
+
+
+
+# run the server
+Geoffrey = require '../'
+server = new Geoffrey options
