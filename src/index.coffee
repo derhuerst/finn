@@ -26,7 +26,7 @@ class Geoffrey extends EventEmitter
 
 	scripts: null
 
-	scripts: null
+	port: null
 
 
 
@@ -40,6 +40,8 @@ class Geoffrey extends EventEmitter
 			throw new Error 'no wit token passed'
 
 		options.scripts = path.resolve if options.scripts? then options.scripts else "#{__dirname}/../scripts"
+
+		@port if options.port? then options.port else 10000
 
 		# load scripts
 		@scripts = {}
@@ -66,7 +68,8 @@ class Geoffrey extends EventEmitter
 				@query question, (answer) ->
 					response.write JSON.stringify answer
 			response.end()
-		@server.listen if oprt? then port else 10000
+		@server.listen @port
+		log "server listening on port #{@port}"
 
 
 

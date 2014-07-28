@@ -23,6 +23,7 @@ pkg			= require './package.json'
 switches = [
 	'-w	wit.ai token (required)'
 	'-s	scripts path'
+	'-p	port'
 	'-h	this help'
 	'-v	geoffrey version'
 ]
@@ -47,6 +48,10 @@ if not options.w?
 	console.log 'no wit.ai token passed'
 	process.exit 1
 
+# option -p
+if not options.p?
+	options.p = 10000
+
 # option -s
 isDir = (path) ->
 	return fs.existsSync(options.s) and fs.statSync(options.s).isDirectory()
@@ -63,4 +68,4 @@ else
 server = new Geoffrey
 	witToken: options.w
 	scripts: options.s
-log 'server running'
+	port: options.p
