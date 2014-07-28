@@ -28,11 +28,6 @@
 		"obs-log":			"^1.1.0",
 		"readall":			"^0.0.4"
 	},
-	"scripts": {
-		"build": "npm install && gulp build",
-		"dist": "npm run build",
-		"run": "coffee server.coffee"
-	},
 	"bin": {
 		"geoffrey": "server.coffee"
 	},
