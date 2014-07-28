@@ -9,7 +9,7 @@
 # dependencies
 {EventEmitter}	= require 'events'
 path			= require 'path'
-findit			= require 'findit'
+walkdir			= require 'walkdir'
 log				= require 'obs-log'
 http			= require 'http'
 readAll			= require 'readall'
@@ -25,71 +25,106 @@ class Geoffrey extends EventEmitter
 
 	wit: null
 
-	scripts: null
+	plugins: null
 
 	port: null
+	server: null
 
 
 
-	constructor: (options) ->
-		if !options?
-			options = {}
+	constructor: (_) ->
+		_ = {} if not _?
 
-		if not options.witToken?
+		# wit.ai connection
+		if not _.witToken?
 			throw new Error 'no wit token passed'
-		@wit = new Wit options.witToken
+		@wit = new Wit _.witToken
 
-		options.scripts = path.resolve if options.scripts? then options.scripts else "#{__dirname}/../scripts"
-
-		@port = if options.port? then options.port else 10000
-
-		# load scripts
-		@scripts = {}
-		reader = findit options.scripts
-		reader.on 'file', (file) =>
-			file = path.relative options.scripts, file
-			if (path.extname file) is '.coffee'
-				log "using script #{file}"
-				script = path.basename().replace '.', '-'
-				@scripts[script] = require path.resolve options.scripts, file
+		# load plugins
+		@plugins = {}
+		reader = walkdir (if _.plugins? then _.plugins else "#{process.env.HOME}/.geoffrey"),
+			no_recurse: true
+		reader.on 'directory', (file) =>
+			return if /^\./.test path.basename file    # directory begins with .
+			name = path.basename(file).replace '.', '-'
+			try
+				@plugins[name] =
+					function: require file
+					storage: {}
+				log "#{file} plugin loaded"
+			catch
+				log.warn "coudn't load #{name} plugin"
 
 		# HTTP server
-		if not options.listen? or options.listen is true
-			@listen()
+		@port = if _.port? then _.port else 10000
+		@listen() if not _.listen? or _.listen is true
 
 
 
-	listen: (port) ->
+	listen: () ->
+		# plugin error callback
+		onError = (request, response, error) ->
+			response.status = 500
+			response.end JSON.stringify
+				status: 'error'
+				message: error
+
+		# plugin success callback
+		onSuccess = (request, response, answer) ->
+			response.status = 200
+			answer.status = 'ok'
+			response.end JSON.stringify answer
+
+		# setup HTTP server
 		@server = http.createServer()
 		@server.on 'request', (request, response) =>
-			response.status = 200
 			response.setHeader 'Content-Type', 'application/json'
-			readAll request, (error, question) =>    # read all stream data
-				@query question.toString(), (answer) ->
-					response.end JSON.stringify answer
+			readAll request, (error, question) =>
+				return if error
+				@query
+					question: question.toString()
+					error: (error) ->
+						onError request, response, error
+					success: (answer) ->
+						onSuccess request, response, answer
 		@server.listen @port
-		log "server listening on port #{@port}"
+		log "listening on port #{@port}"
 
 
 
-	query: (text, callback) ->
-		@_queryWit text, (command, data) ->
-			callback @scripts[command] data
+	query: (_) ->
+		# check parameters
+		if not _.question?
+			throw new Error 'no question passed'
+		if not _.success?
+			throw new Error 'no success callback passed'
+		_.error = (()->) if not _.error?
 
+		
+		# plugin error callback
+		onError = (error) ->
+			log.warn "'#{_.question}'\t#{error}"
+			_.error error
 
+		# plugin success callback
+		onSuccess = (answer) ->
+			log.warn "'#{_.question}'\tanswered"
+			_.success answer
 
-	_queryWit: (text, callback) ->
-		wit.analyze {
-			user_text: text
-		}, (error, response, result) ->
-			data = []
-			result = JSON.parse result
-			console.log result
-			for entity in result.entities
-				data.push
-					type: entity.value
-					value: entity.body
-			callback result.intent, data
+		query =
+			user_text: _.question
+		@wit.analyze query, (error, response, result) =>
+			# parse response
+			result = JSON.parse(result).outcomes[0]
+			entities = []
+			for type, value of result.entities
+				entities.push {type, value}
+
+			# call plugin
+			if not @plugins[result.intent]?
+				return onError "no #{_.result.intent} plugin loaded"
+			plugin = @plugins[result.intent]
+			plugin.function _.question, entities, plugin.storage, onSuccess, onError    # pass data to plugin
 
 
 

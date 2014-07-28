@@ -24,7 +24,7 @@
 	"license": "BSD-3-Clause",
 	"dependencies": {
 		"minimist":			"^0.2.0",
-		"findit":			"^2.0.0",
+		"walkdir":			"^0.0.7",
 		"obs-log":			"^1.1.0",
 		"readAll":			"^0.0.4"
 	},
