@@ -41,7 +41,7 @@ class Geoffrey extends EventEmitter
 
 		options.scripts = path.resolve if options.scripts? then options.scripts else "#{__dirname}/../scripts"
 
-		@port if options.port? then options.port else 10000
+		@port = if options.port? then options.port else 10000
 
 		# load scripts
 		@scripts = {}
