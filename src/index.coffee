@@ -12,6 +12,7 @@ path			= require 'path'
 findit			= require 'findit'
 log				= require 'obs-log'
 http			= require 'http'
+readAll			= require 'readall'
 wit				= require('wit-node').wit    # bug in the wit-node package; todo: create pull request
 
 
