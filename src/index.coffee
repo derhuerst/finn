@@ -1,6 +1,5 @@
 # geoffrey
 # goeffrey is a Siri-like personal assistant running on node.js.
-# v0.2.0
 
 
 
@@ -36,9 +35,9 @@ class Geoffrey extends EventEmitter
 		_ = {} if not _?
 
 		# wit.ai connection
-		if not _.witToken?
+		if not _.wit?
 			throw new Error 'no wit token passed'
-		@wit = new Wit _.witToken
+		@wit = new Wit _.wit
 
 		# load plugins
 		@plugins = {}
