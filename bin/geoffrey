@@ -12,9 +12,9 @@ fs				= require 'fs'
 config = {}
 if fs.existsSync "#{process.env.HOME}/.geoffrey/config.json"
 	config = JSON.parse fs.readFileSync "#{process.env.HOME}/.geoffrey/config.json"
-config.scripts = "#{process.env.HOME}/.geoffrey/scripts" if not config.scripts?
-config.adaptors = "#{process.env.HOME}/.geoffrey/adaptors" if not config.adaptors?
-config.adaptor = 'http' if not config.adaptor?
+config.plugins = "#{process.env.HOME}/.geoffrey/plugins" if not config.plugins?
+config.adapters = "#{process.env.HOME}/.geoffrey/adapters" if not config.adapters?
+config.adapter = 'http' if not config.adapter?
 config.log = false if not config.log?
 
 
@@ -34,7 +34,7 @@ app.option 'version',
 
 
 
-# geoffrey server --wit … --scripts … --adaptors … --adaptor …
+# geoffrey server --wit … --plugins … --adapters … --adapter …
 app.command 'server'
 	.help 'run the geoffrey server'
 
@@ -45,29 +45,29 @@ app.command 'server'
 		callback: (token) ->
 			config.wit = token
 
-	# --scripts
-	.option 'scripts',
-		abbr: 's'
-		default: config.scripts
-		help: 'scripts path'
+	# --plugins
+	.option 'plugins',
+		abbr: 'p'
+		default: config.plugins
+		help: 'plugins path'
 		callback: (path) ->
-			config.scripts = path
+			config.plugins = path
 
-	# --adaptors
-	.option 'adaptors',
+	# --adapters
+	.option 'adapters',
 		abbr: 'd'
-		default: config.adaptors
-		help: 'adaptors path'
+		default: config.adapters
+		help: 'adapters path'
 		callback: (path) ->
-			config.adaptors = path
+			config.adapters = path
 
-	# --adaptor
-	.option 'adaptor',
+	# --adapter
+	.option 'adapter',
 		abbr: 'a'
-		default: config.adaptor
-		help: 'adaptor to use'
+		default: config.adapter
+		help: 'adapter to use'
 		callback: (name) ->
-			config.adaptor = name
+			config.adapter = name
 
 	.callback () ->
 		(require '../scripts/server') config
@@ -76,33 +76,33 @@ app.command 'server'
 
 
 
-# geoffrey deps --scripts … --adaptors … --adaptor …
+# geoffrey deps --plugins … --adapters … --adapter …
 app.command 'deps'
-	.help 'install script & adaptor dependencies'
+	.help 'install script & adapter dependencies'
 
-	# --scripts
-	.option 'scripts',
-		abbr: 's'
+	# --plugins
+	.option 'plugins',
+		abbr: 'p'
 		default: config.scripts
-		help: 'scripts path'
+		help: 'plugins path'
 		callback: (path) ->
-			config.scripts = path
+			config.plugins = path
 
-	# --adaptors
-	.option 'adaptors',
+	# --adapters
+	.option 'adapters',
 		abbr: 'd'
-		default: config.adaptors
-		help: 'adaptors path'
+		default: config.adapters
+		help: 'adapters path'
 		callback: (path) ->
-			config.adaptors = path
+			config.adapters = path
 
-	# --adaptor
-	.option 'adaptor',
+	# --adapter
+	.option 'adapter',
 		abbr: 'a'
-		default: config.adaptor
-		help: 'adaptor to use'
+		default: config.adapter
+		help: 'adapter to use'
 		callback: (name) ->
-			config.adaptor = name
+			config.adapter = name
 
 	.callback () ->
 		(require '../scripts/deps') config
