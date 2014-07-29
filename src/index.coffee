@@ -1,15 +1,7 @@
-# geoffrey
-# goeffrey is a Siri-like personal assistant running on node.js.
-
-
-
-
-
 # dependencies
 {EventEmitter}	= require 'events'
 path			= require 'path'
 walkdir			= require 'walkdir'
-log				= require 'obs-log'
 http			= require 'http'
 readAll			= require 'readall'
 Wit				= require 'wit-ai'
@@ -22,6 +14,8 @@ class Geoffrey extends EventEmitter
 
 
 
+	log: null
+
 	wit: null
 
 	plugins: null
@@ -33,6 +27,9 @@ class Geoffrey extends EventEmitter
 
 	constructor: (_) ->
 		_ = {} if not _?
+
+		# wit.ai connection
+		@log = if _.log? then _.log else console
 
 		# wit.ai connection
 		if not _.wit?
@@ -50,9 +47,9 @@ class Geoffrey extends EventEmitter
 				@plugins[name] =
 					function: require file
 					storage: {}
-				log "#{file} plugin loaded"
+				@log.info "#{file} plugin loaded"
 			catch
-				log.warn "coudn't load #{name} plugin"
+				@log.warning "coudn't load #{name} plugin"
 
 		# HTTP server
 		@port = if _.port? then _.port else 10000
@@ -87,7 +84,7 @@ class Geoffrey extends EventEmitter
 					success: (answer) ->
 						onSuccess request, response, answer
 		@server.listen @port
-		log "listening on port #{@port}"
+		@log.info "listening on port #{@port}"
 
 
 
@@ -102,12 +99,12 @@ class Geoffrey extends EventEmitter
 		
 		# plugin error callback
 		onError = (error) ->
-			log.warn "'#{_.question}'\t#{error}"
+			@log.warning "'#{_.question}'\t#{error}"
 			_.error error
 
 		# plugin success callback
 		onSuccess = (answer) ->
-			log.warn "'#{_.question}'\tanswered"
+			@log.warning "'#{_.question}'\tanswered"
 			_.success answer
 
 		query =

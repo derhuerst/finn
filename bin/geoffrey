@@ -1,73 +1,126 @@
 #!/usr/bin/env coffee
 
-# geoffrey
-# goeffrey is a Siri-like personal assistant running on node.js.
-
-
-
-
-
 # dependencies
-{OptionParser}	= require 'optparse'
-path			= require 'path'
+app				= require 'nomnom'
 fs				= require 'fs'
 
 
 
 
 
-pkg			= require '../package.json'
-parser = new OptionParser [
-	[	'-h',	'--help',			'print this help and quit'			]
-	[	'-v',	'--version',		'print geoffrey version and quit'	]
-	[	'-d',	'--deps',			'install plugin dependencies first'	]
-	[	'-w',	'--wit TOKEN',		'wit.ai token'						]
-	[	'-s',	'--scripts PATH',	'scripts path'						]
-	[	'-p',	'--port PORT',		'HTTP port'							]
-]
-options = {}
+# compute config
+config = {}
+if fs.existsSync "#{process.env.HOME}/.geoffrey/config.json"
+	config = JSON.parse fs.readFileSync "#{process.env.HOME}/.geoffrey/config.json"
+config.scripts = "#{process.env.HOME}/.geoffrey/scripts" if not config.scripts?
+config.adaptors = "#{process.env.HOME}/.geoffrey/adaptors" if not config.adaptors?
+config.adaptor = 'http' if not config.adaptor?
+config.log = false if not config.log?
 
 
 
 
 
-# --help
-parser.on 'help', () ->
-	console.log Parser.toString()
-	process.exit 0
-
-# --version
-parser.on 'version', () ->
-	console.log pkg.version
-	process.exit 0
-
-# --wit
-parser.on 'wit', (option, value) ->
-	options.wit = value
-
-# --port
-parser.on 'port', (option, value) ->
-	options.port = value
-
-# --scripts
-parser.on 'scripts', (option, value) ->
-	value = path.resolve process.env.HOME, value
-	if fs.existsSync(value) and fs.statSync(value).isDirectory()
-		options.scripts = value
-	else
-		console.log "#{value}: no such directory"
-		process.exit 1
-
-# --deps
-parser.on 'deps', (option, value) ->
-	# todo
-
-parser.parse process.argv
+# geoffrey --version
+app.option 'version',
+	abbr: 'v'
+	flag: true
+	help: 'print geoffrey version'
+	callback: () ->
+		console.log require('../package.json').version
+		process.exit 0
 
 
 
 
 
-# run the server
-Geoffrey = require '../'
-server = new Geoffrey options
+# geoffrey server --wit … --scripts … --adaptors … --adaptor …
+app.command 'server'
+	.help 'run the geoffrey server'
+
+	# --wit
+	.option 'wit',
+		abbr: 'w'
+		help: 'wit API token'
+		callback: (token) ->
+			config.wit = token
+
+	# --scripts
+	.option 'scripts',
+		abbr: 's'
+		default: config.scripts
+		help: 'scripts path'
+		callback: (path) ->
+			config.scripts = path
+
+	# --adaptors
+	.option 'adaptors',
+		abbr: 'd'
+		default: config.adaptors
+		help: 'adaptors path'
+		callback: (path) ->
+			config.adaptors = path
+
+	# --adaptor
+	.option 'adaptor',
+		abbr: 'a'
+		default: config.adaptor
+		help: 'adaptor to use'
+		callback: (name) ->
+			config.adaptor = name
+
+	.callback () ->
+		(require '../scripts/server') config
+
+
+
+
+
+# geoffrey deps --scripts … --adaptors … --adaptor …
+app.command 'deps'
+	.help 'install script & adaptor dependencies'
+
+	# --scripts
+	.option 'scripts',
+		abbr: 's'
+		default: config.scripts
+		help: 'scripts path'
+		callback: (path) ->
+			config.scripts = path
+
+	# --adaptors
+	.option 'adaptors',
+		abbr: 'd'
+		default: config.adaptors
+		help: 'adaptors path'
+		callback: (path) ->
+			config.adaptors = path
+
+	# --adaptor
+	.option 'adaptor',
+		abbr: 'a'
+		default: config.adaptor
+		help: 'adaptor to use'
+		callback: (name) ->
+			config.adaptor = name
+
+	.callback () ->
+		(require '../scripts/deps') config
+
+
+
+
+
+# geoffrey init
+app.command 'init'
+	.help 'help configuring geoffrey'
+
+	.callback () ->
+		(require '../scripts/init') config
+
+
+
+
+
+# parse options, call scripts
+app.parse()

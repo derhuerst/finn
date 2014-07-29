@@ -23,9 +23,9 @@
 	},
 	"license": "BSD-3-Clause",
 	"dependencies": {
-		"optparse":			"^1.0.5",
+		"nomnom":			"^1.8.0",
+		"logme":			"^0.4.0",
 		"walkdir":			"^0.0.7",
-		"obs-log":			"^1.1.0",
 		"readall":			"^0.0.4"
 	},
 	"bin": {
