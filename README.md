@@ -1,6 +1,6 @@
 # geoffrey
 
-*geoffrey* is a hackable personal assistant. He is like *Siri* or *Google Now* for Nerds.
+*geoffrey* is a hackable personal assistant, similar to *Siri* or *Google Now*, but for Nerds.
 
 He uses [wit.ai](https://wit.ai) to interpret your input and the processes it using [small plugins](https://github.com/derhuerst/.geoffrey). He listens for HTTP requests by the [client](https://github.com/derhuerst/geoffrey-client).
 
