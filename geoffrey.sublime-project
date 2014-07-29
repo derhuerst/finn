@@ -5,7 +5,9 @@
 			"name": "witbot",
 			"folder_exclude_patterns": [
 				"src",
-				"bin"
+				"scripts",
+				"bin",
+				"docs"
 			],
 			"file_exclude_patterns": [
 				"*.sublime-workspace"
@@ -16,8 +18,16 @@
 			"name": "src"
 		},
 		{
+			"path": "./scripts",
+			"name": "scripts"
+		},
+		{
 			"path": "./bin",
 			"name": "bin"
+		},
+		{
+			"path": "./docs",
+			"name": "docs"
 		}
 	],
 	"settings": {
