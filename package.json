@@ -23,10 +23,9 @@
 	},
 	"license": "MIT",
 	"dependencies": {
-		"nomnom":			"^1.8.0",
-		"logme":			"^0.4.0",
-		"walkdir":			"^0.0.7",
-		"readall":			"^0.0.4"
+		"nomnom":				"^1.8.0",
+		"logme":				"^0.4.0",
+		"colors":				"^0.6.2"
 	},
 	"bin": {
 		"geoffrey": "bin/geoffrey"
