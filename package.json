@@ -30,10 +30,10 @@
 		"lib": "./src"
 	},
 	"dependencies": {
-		"nomnom":				"^1.8.0",
-		"logme":				"^0.4.0",
-		"colors":				"^0.6.2",
-		"jsgoecke/node-wit":	"^0.0.1"
+		"nomnom":											"^1.8.0",
+		"logme":											"^0.4.0",
+		"colors":											"^0.6.2",
+		"git://github.com/derhuerst/geoffrey.git#master":	"^0.0.1"
 	},
 	"bin": {
 		"geoffrey": "bin/geoffrey"
