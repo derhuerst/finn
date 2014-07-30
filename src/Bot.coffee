@@ -2,7 +2,7 @@
 events			= require 'events'
 fs				= require 'fs'
 path			= require 'path'
-wit				= require 'node-wit'
+wit				= require 'wit-ai'
 noop			= ()->
 
 Adapter			= require './Adapter'
