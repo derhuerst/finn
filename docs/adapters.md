@@ -1,0 +1,3 @@
+# *geoffrey* adapters
+
+coming soon!
