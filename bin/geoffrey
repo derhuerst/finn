@@ -111,12 +111,12 @@ app.command 'deps'
 
 
 
-# geoffrey init
-app.command 'init'
-	.help 'help configuring geoffrey'
+# geoffrey doctor
+app.command 'doctor'
+	.help 'get help configuring geoffrey'
 
 	.callback () ->
-		(require '../scripts/init') config
+		(require '../scripts/doctor') config
 
 
 

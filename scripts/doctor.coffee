@@ -8,4 +8,4 @@ log = new Logme
 
 
 module.exports = () ->
-	log.warning 'the init command is not implemented yet'
+	log.warning 'the doctor command is not implemented yet'
