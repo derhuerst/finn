@@ -33,7 +33,8 @@
 		"nomnom":			"^1.8.0",
 		"logme":			"^0.4.0",
 		"colors":			"^0.6.2",
-		"wit-ai":			"git://github.com/jsgoecke/node-wit"
+		"wit-ai":			"git://github.com/jsgoecke/node-wit",
+		"simple-spinner":	"^0.0.1"
 	},
 	"bin": {
 		"geoffrey": "bin/geoffrey"

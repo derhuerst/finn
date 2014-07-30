@@ -3,6 +3,7 @@ fs		 		= require 'fs'
 path	 		= require 'path'
 logme			= require 'logme'
 colors			= require 'colors'
+spinner			= require 'simple-spinner'
 
 
 
@@ -17,18 +18,38 @@ module.exports = (options) ->
 	tests = []
 	for test in fs.readdirSync path.join __dirname, 'doctor'
 		tests.push test.replace /.coffee$/, ''
+	tests.sort()
 
 	# introdution
-	log.info "Hi! I am the doctor. I'm going to run the tests #{tests.join(', ').bold} to check if your geoffrey installation is healthy."
+	log.info "Hi! I am the doctor. I'm going to run several tests to check if your geoffrey installation is healthy."
 
-	# execute tests
-	for name in tests
-		test = require path.join __dirname, 'doctor', name
-		result = test options
-		if result.ok isnt true
-			log.error "test #{name}: #{result.message}"
-			log.info "Please run me again if you solved the problem. I will look for further problems then."
-			process.exit 1
+	# run next test
+	i = -1
+	next = () ->
+		i++
+		if i is tests.length
+			return finish()
+		test = require path.join __dirname, 'doctor', tests[i]
+		log.debug "Running the test #{tests[i].bold} now."
+		spinner.start 75
+		test options, success, error
 
-	# success
-	log.info "I couldn't find any problems."
+	# success callback
+	success = (message) ->
+		spinner.stop()
+		log.info message.green if message?
+		next()
+
+	# error callback
+	error = (message) ->
+		spinner.stop()
+		log.error message.red
+		log.info "Please run me again if you solved the problem. I will look for further problems then."
+		process.exit 1
+
+	# success callback
+	finish = () ->
+		log.info "I couldn't find any problems."
+
+	# start tests
+	next()
