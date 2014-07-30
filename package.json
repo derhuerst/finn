@@ -21,7 +21,14 @@
 		"type": "git",
 		"url": "git://github.com/derhuerst/geoffrey.git"
 	},
+	"homepage": "https://github.com/derhuerst/geoffrey",
 	"license": "MIT",
+	"preferGlobal": true,
+	"directories": {
+		"bin": "./bin",
+		"doc": "./docs",
+		"lib": "./src"
+	},
 	"dependencies": {
 		"nomnom":				"^1.8.0",
 		"logme":				"^0.4.0",
