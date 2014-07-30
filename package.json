@@ -1,7 +1,7 @@
 {
 	"name": "geoffrey",
 	"description": "goeffrey is a Siri-like personal assistant running on node.js.",
-	"version": "0.6.1",
+	"version": "0.6.2",
 	"main": "index.coffee",
 	"keywords": [
 		"geoffrey",
