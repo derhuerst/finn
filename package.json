@@ -2,7 +2,6 @@
 	"name": "geoffrey",
 	"description": "goeffrey is a Siri-like personal assistant running on node.js.",
 	"version": "0.6.3",
-	"main": "index.coffee",
 	"keywords": [
 		"geoffrey",
 		"personal assistant",
@@ -29,6 +28,10 @@
 		"doc": "./docs",
 		"lib": "./src"
 	},
+	"main": "index.coffee",
+	"bin": {
+		"geoffrey": "bin/geoffrey"
+	},
 	"dependencies": {
 		"nomnom":			"^1.8.0",
 		"logme":			"^0.4.0",
@@ -36,9 +39,6 @@
 		"wit-ai":			"git://github.com/jsgoecke/node-wit",
 		"simple-spinner":	"^0.0.1",
 		"semver":			"^3.0.1"
-	},
-	"bin": {
-		"geoffrey": "bin/geoffrey"
 	},
 	"engine": "node >= 0.10"
 }
