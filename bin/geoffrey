@@ -20,7 +20,6 @@ run = (command, args) ->
 		config = {}
 	for key, value of args
 		config[key] = value
-	console.log config
 
 	# load command
 	command = require path.join '..', 'scripts', command
