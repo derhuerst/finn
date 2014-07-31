@@ -4,6 +4,8 @@
 
 ***geoffrey* is only a server. To use him conveniently, you need to an [adapter](./blob/master/docs/adapters.md) and a [client](./blob/master/docs/clients.md).** You could also install *geoffrey* (the server) on a small server-like machine in your house – for example on a [Raspberry Pi](http://www.raspberrypi.org/) – and run the client on your local computer.
 
-[Getting started with *geoffrey*](./blob/master/docs/getting-started.md)
-[*geoffrey* adapters](./blob/master/docs/adapters.md)
-[*geoffrey* plugins](./blob/master/docs/plugins.md)
+## more information
+
+- [Getting started with *geoffrey*](./blob/master/docs/getting-started.md)
+- [*geoffrey* adapters](./blob/master/docs/adapters.md)
+- [*geoffrey* plugins](./blob/master/docs/plugins.md)
