@@ -1,4 +1,4 @@
-![](https://github.com/derhuerst/finn/raw/master/img/logo.png)
+![](https://rawgithub.com/derhuerst/finn/master/img/logo.png)
 
 # Finn
 
