@@ -4,19 +4,27 @@
 app				= require 'nomnom'
 fs				= require 'fs'
 path			= require 'path'
-
-
-
-
-
-# compute config
+pkg				= require path.join '..', 'package.json'
 config = {}
-if fs.existsSync "#{process.env.HOME}/.geoffrey/config.json"
-config.plugins = "#{process.env.HOME}/.geoffrey/plugins" if not config.plugins?
-config.adapters = "#{process.env.HOME}/.geoffrey/adapters" if not config.adapters?
-config.adapter = 'http' if not config.adapter?
-config.log = false if not config.log?
-	config = require path.join process.env.HOME, '.geoffrey', 'config'
+
+
+
+
+
+# run a command
+run = (command, args) ->
+	# load config
+	try
+		config = require path.join args.resources, 'config'
+	catch
+		config = {}
+	for key, value of args
+		config[key] = value
+	console.log config
+
+	# load command
+	command = require path.join '..', 'scripts', command
+	command config
 
 
 
@@ -28,85 +36,54 @@ app.option 'version',
 	flag: true
 	help: 'print geoffrey version'
 	callback: () ->
-		console.log require('../package.json').version
+		console.log pkg.version
 		process.exit 0
 
 
 
 
 
-# geoffrey server --wit … --plugins … --adapters … --adapter …
+# geoffrey server --wit … --ressources … --adapter …
 app.command 'server'
 	.help 'run the geoffrey server'
 
-	# --wit
+	.option 'resources',
+		abbr: 'r'
+		default: path.join process.env.HOME, '.geoffrey'
+		help: 'path of config.json, plugins and adapters'
+
 	.option 'wit',
 		abbr: 'w'
 		help: 'wit API token'
-		callback: (token) ->
-			config.wit = token
 
-	# --plugins
-	.option 'plugins',
-		abbr: 'p'
-		default: config.plugins
-		help: 'plugins path'
-		callback: (path) ->
-			config.plugins = path
-
-	# --adapters
-	.option 'adapters',
-		abbr: 'd'
-		default: config.adapters
-		help: 'adapters path'
-		callback: (path) ->
-			config.adapters = path
-
-	# --adapter
 	.option 'adapter',
 		abbr: 'a'
 		default: config.adapter
 		help: 'adapter to use'
-		callback: (name) ->
-			config.adapter = name
 
-	.callback () ->
-		(require '../scripts/server') config
+	.callback (args) ->
+		run 'server', args
 
 
 
 
 
-# geoffrey deps --plugins … --adapters … --adapter …
+# geoffrey deps --resources …
 app.command 'deps'
 	.help 'install script & adapter dependencies'
 
-	# --plugins
-	.option 'plugins',
-		abbr: 'p'
-		default: config.scripts
-		help: 'plugins path'
-		callback: (path) ->
-			config.plugins = path
+	.option 'resources',
+		abbr: 'r'
+		default: path.join process.env.HOME, '.geoffrey'
+		help: 'path of config.json, plugins and adapters'
 
-	# --adapters
-	.option 'adapters',
-		abbr: 'd'
-		default: config.adapters
-		help: 'adapters path'
-		callback: (path) ->
-			config.adapters = path
+	.option 'clean',
+		abbr: 'c'
+		default: config.clean
+		help: 'install dependencies from scratch'
 
-	# --adapter
-	.option 'adapter',
-		abbr: 'a'
-		default: config.adapter
-		help: 'adapter to use'
-		callback: (name) ->
-			config.adapter = name
-
-	.callback () ->
-		(require '../scripts/deps') config
+	.callback (args) ->
+		run 'deps', args
 
 
 
@@ -114,14 +91,14 @@ app.command 'deps'
 
 # geoffrey doctor
 app.command 'doctor'
-	.help 'get help configuring geoffrey'
+	.help 'vet the geoffrey installation'
 
-	.callback () ->
-		(require '../scripts/doctor') config
-
-
+	.callback (args) ->
+		run 'doctor', args
 
 
 
-# parse options, call scripts
+
+
+# parse arguments, call commands
 app.parse()
