@@ -6,6 +6,6 @@
 
 ## more information
 
-- [Getting started with *geoffrey*](./blob/master/docs/getting-started.md)
-- [*geoffrey* adapters](./blob/master/docs/adapters.md)
-- [*geoffrey* plugins](./blob/master/docs/plugins.md)
+- [Getting started with *geoffrey*](docs/getting-started.md)
+- [*geoffrey* adapters](docs/adapters.md)
+- [*geoffrey* plugins](docs/plugins.md)
