@@ -3,6 +3,7 @@
 # dependencies
 app				= require 'nomnom'
 fs				= require 'fs'
+path			= require 'path'
 
 
 
@@ -11,11 +12,11 @@ fs				= require 'fs'
 # compute config
 config = {}
 if fs.existsSync "#{process.env.HOME}/.geoffrey/config.json"
-	config = JSON.parse fs.readFileSync "#{process.env.HOME}/.geoffrey/config.json"
 config.plugins = "#{process.env.HOME}/.geoffrey/plugins" if not config.plugins?
 config.adapters = "#{process.env.HOME}/.geoffrey/adapters" if not config.adapters?
 config.adapter = 'http' if not config.adapter?
 config.log = false if not config.log?
+	config = require path.join process.env.HOME, '.geoffrey', 'config'
 
 
 
