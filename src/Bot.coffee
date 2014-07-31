@@ -88,10 +88,11 @@ class Bot extends events.EventEmitter
 		# prepare callbacks
 		onSuccess = (answer) =>
 			@log.debug "'#{question}'", 'answered'
-			answer.status = 'ok'
+			answer.ok = true
 			success answer
 		onError = (aError) =>
 			@log.error "'#{question}'", "error: '#{aError}'"
+			aError.ok = false
 			error aError
 
 		# call wit.ai client
