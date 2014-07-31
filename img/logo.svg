@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="200" height="100" viewBox="0 0 100 50">
+	<title>Finn logo</title>
+	<description>https://github.com/derhuerst/finn</description>
+	<defs>
+		<style>
+			@import url(http://fonts.googleapis.com/css?family=Love+Ya+Like+A+Sister);
+		</style>
+	</defs>
+	<text x="5" y="40" fill="black" font-family="Love Ya Like A Sister" font-size="48" font-weight="normal">Finn</text>
+</svg>
