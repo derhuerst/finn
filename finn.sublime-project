@@ -2,7 +2,7 @@
 	"folders": [
 		{
 			"path": ".",
-			"name": "witbot",
+			"name": "finn",
 			"folder_exclude_patterns": [
 				"src",
 				"scripts",

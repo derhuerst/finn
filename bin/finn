@@ -29,11 +29,11 @@ run = (command, args) ->
 
 
 
-# geoffrey --version
+# finn --version
 app.option 'version',
 	abbr: 'v'
 	flag: true
-	help: 'print geoffrey version'
+	help: 'print finn version'
 	callback: () ->
 		console.log pkg.version
 		process.exit 0
@@ -42,13 +42,13 @@ app.option 'version',
 
 
 
-# geoffrey server --wit … --ressources … --adapter …
+# finn server --wit … --ressources … --adapter …
 app.command 'server'
-	.help 'run the geoffrey server'
+	.help 'run the finn server'
 
 	.option 'resources',
 		abbr: 'r'
-		default: path.join process.env.HOME, '.geoffrey'
+		default: path.join process.env.HOME, '.finn'
 		help: 'path of config.json, plugins and adapters'
 
 	.option 'wit',
@@ -67,13 +67,13 @@ app.command 'server'
 
 
 
-# geoffrey deps --resources …
+# finn deps --resources …
 app.command 'deps'
 	.help 'install script & adapter dependencies'
 
 	.option 'resources',
 		abbr: 'r'
-		default: path.join process.env.HOME, '.geoffrey'
+		default: path.join process.env.HOME, '.finn'
 		help: 'path of config.json, plugins and adapters'
 
 	.option 'clean',
@@ -88,9 +88,9 @@ app.command 'deps'
 
 
 
-# geoffrey doctor
+# finn doctor
 app.command 'doctor'
-	.help 'vet the geoffrey installation'
+	.help 'vet the finn installation'
 
 	.callback (args) ->
 		run 'doctor', args

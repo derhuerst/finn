@@ -1,7 +1,7 @@
 # dependencies
 logme			= require 'logme'
 path			= require 'path'
-geoffrey		= require '../src/index'
+finn			= require '../src/index'
 
 
 
@@ -10,7 +10,7 @@ geoffrey		= require '../src/index'
 module.exports = (options) ->
 	log = new logme.Logme
 		theme: 'socket.io'
-	bot = new geoffrey.Bot
+	bot = new finn.Bot
 		wit: options.wit
 		log: log
 	bot.addAdapter path.join options.adapters, options.adapter

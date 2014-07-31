@@ -1,9 +1,9 @@
 {
-	"name": "geoffrey",
+	"name": "finn",
 	"description": "goeffrey is a Siri-like personal assistant running on node.js.",
 	"version": "0.6.3",
 	"keywords": [
-		"geoffrey",
+		"finn",
 		"personal assistant",
 		"wit.ai",
 		"nodejs",
@@ -18,9 +18,9 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git://github.com/derhuerst/geoffrey.git"
+		"url": "git://github.com/derhuerst/finn.git"
 	},
-	"homepage": "https://github.com/derhuerst/geoffrey",
+	"homepage": "https://github.com/derhuerst/finn",
 	"license": "MIT",
 	"preferGlobal": true,
 	"directories": {
@@ -30,7 +30,7 @@
 	},
 	"main": "index.coffee",
 	"bin": {
-		"geoffrey": "bin/geoffrey"
+		"finn": "bin/finn"
 	},
 	"dependencies": {
 		"nomnom":			"^1.8.0",

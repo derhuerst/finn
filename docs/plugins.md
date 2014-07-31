@@ -1,3 +1,3 @@
-# *geoffrey* plugins
+# *finn* plugins
 
 coming soon!

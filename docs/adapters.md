@@ -1,3 +1,3 @@
-# *geoffrey* adapters
+# *finn* adapters
 
 coming soon!

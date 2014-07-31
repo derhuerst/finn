@@ -1,3 +1,3 @@
-# Getting started with *geoffrey*
+# Getting started with *finn*
 
 coming soon!

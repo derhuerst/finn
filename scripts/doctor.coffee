@@ -21,7 +21,7 @@ module.exports = (options) ->
 	tests.sort()
 
 	# introdution
-	log.info "Hi! I am the doctor. I'm going to run several tests to check if your geoffrey installation is healthy."
+	log.info "Hi! I am the doctor. I'm going to run several tests to check if your finn installation is healthy."
 
 	# run next test
 	i = -1

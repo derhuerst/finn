@@ -17,7 +17,7 @@ module.exports = (options, success, error) ->
 			npm.commands.view [local.name], true, (aError, remote) ->    # todo: take real `local.name`
 				for latest of remote
 					if semver.lt current, latest
-						error "Your geoffrey version is #{current.bold}, the latest being #{latest.bold}. Please run `#{'npm update'.bold}` to update him."
+						error "Your finn version is #{current.bold}, the latest being #{latest.bold}. Please run `#{'npm update'.bold}` to update him."
 					else
-						success 'Your geoffrey installation is up to date.'
+						success 'Your finn installation is up to date.'
 					break
