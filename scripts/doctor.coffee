@@ -32,7 +32,11 @@ module.exports = (options) ->
 		test = require path.join __dirname, 'doctor', tests[i]
 		log.debug "Running the test #{tests[i].bold} now."
 		spinner.start 75
-		test options, success, error
+		try
+			test options, success, error
+		catch e
+			error 'There is an error in the module.'
+		
 
 	# success callback
 	success = (message) ->
