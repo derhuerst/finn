@@ -87,7 +87,7 @@ class Bot extends events.EventEmitter
 
 		# prepare callbacks
 		onSuccess = (answer) =>
-			@log.info "'#{question}'", 'answered'
+			@log.debug "'#{question}'", 'answered'
 			answer.status = 'ok'
 			success answer
 		onError = (aError) =>
