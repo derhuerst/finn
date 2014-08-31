@@ -2,9 +2,8 @@
 
 # dependencies
 app				= require 'nomnom'
-fs				= require 'fs'
-path			= require 'path'
-pkg				= require path.join '..', 'package.json'
+
+pkg				= require '../package.json'
 config = {}
 
 
@@ -15,14 +14,12 @@ config = {}
 run = (command, args) ->
 	# load config
 	try
-		config = require path.join args.resources, 'config'
-	catch
-		config = {}
+		config = require "#{process.env.HOME}/.finn"
 	for key, value of args
 		config[key] = value
 
 	# load command
-	command = require path.join '..', 'scripts', command
+	command = require "../scripts/#{command}"
 	command config
 
 
@@ -42,14 +39,9 @@ app.option 'version',
 
 
 
-# finn server --wit … --ressources … --adapter …
+# finn server --wit … --adapter …
 app.command 'server'
 	.help 'run the finn server'
-
-	.option 'resources',
-		abbr: 'r'
-		default: path.join process.env.HOME, '.finn'
-		help: 'path of config.json, plugins and adapters'
 
 	.option 'wit',
 		abbr: 'w'
@@ -57,43 +49,10 @@ app.command 'server'
 
 	.option 'adapter',
 		abbr: 'a'
-		default: config.adapter
 		help: 'adapter to use'
 
 	.callback (args) ->
 		run 'server', args
-
-
-
-
-
-# finn deps --resources …
-app.command 'deps'
-	.help 'install script & adapter dependencies'
-
-	.option 'resources',
-		abbr: 'r'
-		default: path.join process.env.HOME, '.finn'
-		help: 'path of config.json, plugins and adapters'
-
-	.option 'clean',
-		abbr: 'c'
-		default: config.clean
-		help: 'install dependencies from scratch'
-
-	.callback (args) ->
-		run 'deps', args
-
-
-
-
-
-# finn doctor
-app.command 'doctor'
-	.help 'vet the finn installation'
-
-	.callback (args) ->
-		run 'doctor', args
 
 
 

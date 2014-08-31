@@ -1,5 +1,6 @@
 # dependencies
 events			= require 'events'
+Storage			= require './Storage'
 
 
 
@@ -10,17 +11,13 @@ class Plugin extends events.EventEmitter
 
 
 
-	# make the plugin able to remember thing along requests
+	# make the plugin able to remember things over multiple requests
 	storage = null
 
 
 
 	constructor: () ->
-		@storage = {}
-
-
-
-	query: (question, entities, success, error) ->
+		@storage = new Storage()
 
 
 

@@ -2,115 +2,75 @@
 events			= require 'events'
 fs				= require 'fs'
 path			= require 'path'
-wit				= require 'wit-ai'
-noop			= ()->
+logme			= require 'logme'
 
-Adapter			= require './Adapter'
-Plugin			= require './Plugin'
+Parser			= require './Parser'
 
 
 
 
 
-# The main `Bot` class holding all other classes together. User input will be delegated to plugins here.
+# A `Bot` holds all other classes together.
 class Bot extends events.EventEmitter
 
 
 
-	# the connected adapter
-	adapter: null
-
-	# the wit.ai client
-	wit: null
-
-	# all plugins
-	plugins: null
+	config: null
 
 	# a log object
 	log: null
 
+	# the connected adapter
+	adapter: null
+
+	# the input parser
+	parser: null
+
+	# a hash of all plugins
+	plugins: null
 
 
-	constructor: (options) ->
 
-		# wit
-		if not options.wit?
-			throw new Error 'no wit.ai client passed'
-		@wit = new wit options.wit
+	constructor: (config) ->
+		super
+
+		# check parameters
+		@config = config
+		throw new Error 'no wit.ai token passed' if not config.wit?
+		throw new Error 'no adapter passed' if not config.adapter?
+
+		@log = new logme.Logme
+			theme: 'smile'
 
 		# plugins
-		@plugins = if options.plugins? then options.plugins else {}
-
-		# log
-		@log = if options.log? then options.log else console
-
-
-
-	addPlugins: (aPath) ->
-		# check parameters
-		if not aPath?
-			throw new Error 'no plugins path passed'
-
-		# walk directory
-		fs.readdir aPath, (error, plugins) =>
+		@plugins = {}
+		fs.readdir path.join(__dirname, 'plugins'), (error, plugins) =>
 			throw new Error 'couldn\'t load plugins' if error
-			for plugin in plugins
-				# load plugin
-				generator = require path.join aPath, plugin
-				PluginClass = generator Plugin    # call generator with base class `Plugin`
-				@plugins[plugin] = new PluginClass this
-				@log.info "plugin #{plugin} added"
+			for file in plugins
+				continue if /^\./.test file    # skip files with leading dot
+				Plugin = require path.join __dirname, 'plugins', file
+				plugin = new Plugin this
+				@plugins[plugin.name] = plugin
+				@log.info "plugin #{plugin.name} loaded"
 
+		@adapter = new (require "./adapters/#{config.adapter}") this
+		@parser = new Parser this
 
-	addAdapter: (aPath) ->
-		# check parameters
-		if not aPath?
-			throw new Error 'no adapter path passed'
-
-		adapter = path.basename aPath
-
-		# load adapter
-		generator = require aPath
-		AdapterClass = generator Adapter    # call generator with base class `Adapter`
-		@adapter = new AdapterClass this
-		@log.info "adapter #{adapter} added"
-
-
-
-	query: (question, success, error) ->
-		# check parameters
-		if not question?
-			throw new Error 'no question passed'
-		if not success?
-			throw new Error 'no success callback passed'
-		error = noop if not error?
-
-		# prepare callbacks
-		onSuccess = (answer) =>
-			@log.debug "'#{question}'", 'answered'
-			answer.ok = true
-			success answer
-		onError = (aError) =>
-			@log.error "'#{question}'", "error: '#{aError}'"
-			aError.ok = false
-			error aError
-
-		# call wit.ai client
-		query =
-			user_text: question
-		@wit.analyze query, (error, response, result) =>
-			# parse response
-			result = JSON.parse(result).outcomes[0]
-			entities = []
-			for type, value of result.entities
-				entities.push {type, value}
-			command = result.intent
-
-			# call plugin
-			if not @plugins[command]?
-				return onError "no #{command} plugin loaded"
-			plugin = @plugins[command]
-			plugin.query question, entities, plugin.storage, onSuccess, onError    # pass data to plugin
+		# glue everything together
+		@adapter.on 'request', (request) =>
+			@log.debug "> `#{request.input}`"
+			@parser.parse request.input
+			.then (parsed) =>
+				if not @plugins[parsed.plugin]?
+					throw "unknown plugin #{parsed.plugin}"
+				return @plugins[parsed.plugin].process parsed
+			.then (response) =>
+				@log.debug "< `#{response}`"
+				request.respond response
+			.catch (error) =>
+				@log.error error
+				request.error error
+			.done()
 
 
 
