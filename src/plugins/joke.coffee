@@ -19,7 +19,7 @@ class JokePlugin extends Plugin
 	# todo: rewrite?
 	process: (input) ->
 		deferred = q.defer()
-		request 'http://api.icndb.com/jokes/random', (error, response, body) ->
+		request 'http://api.icndb.com/jokes/random?escape=javascript', (error, response, body) ->
 			if error
 				deferred.reject new Error 'coudn\'t connect to the jokes database'
 			else
