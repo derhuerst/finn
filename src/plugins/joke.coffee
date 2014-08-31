@@ -16,7 +16,6 @@ class JokePlugin extends Plugin
 	name: 'joke'
 
 
-	# todo: rewrite?
 	process: (input) ->
 		deferred = q.defer()
 		request 'http://api.icndb.com/jokes/random?escape=javascript', (error, response, body) ->
