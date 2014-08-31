@@ -11,13 +11,17 @@ class Plugin extends events.EventEmitter
 
 
 
-	# make the plugin able to remember things over multiple requests
-	storage = null
+	# the name of the plugin
+	name: null
+
+
+	# a reference to the `Bot`
+	bot: null
 
 
 
-	constructor: () ->
-		@storage = new Storage()
+	constructor: (bot) ->
+		@bot = bot
 
 
 
