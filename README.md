@@ -1,5 +1,3 @@
-![](https://rawgithub.com/derhuerst/finn/master/img/logo.png)
-
 # Finn
 
 ***Finn* is a hackable personal assistant**, similar to *[Siri](https://www.apple.com/de/ios/siri/)* or *[Google Now](http://www.google.com/landing/now/)*, but for Nerds. He uses [wit.ai](https://wit.ai) to **interpret your input and processes it using [small plugins](https://github.com/derhuerst/.finn)**. *Finn* is written in [CoffeeScript](http://coffeescript.org) and published under the [MIT license](./blob/master/LICENSE.md).
